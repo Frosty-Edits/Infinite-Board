@@ -52,6 +52,13 @@ class InfiniteBoard {
             this.ctx.strokeRect(el.x, el.y, el.w, el.h);
             if (!el.isHollow) this.ctx.fillRect(el.x, el.y, el.w, el.h);
         }
+        else if (el.type === 'pen') {
+            el.points.forEach((point, index) => {
+                if (index === 0) this.ctx.moveTo(point.x, point.y);
+                else this.ctx.lineTo(point.x, point.y);
+            });
+            this.ctx.stroke();
+        }
         this.ctx.globalAlpha = 1;
     }
     createElement(pos) {
