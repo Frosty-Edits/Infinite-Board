@@ -59,6 +59,24 @@ class InfiniteBoard {
             });
             this.ctx.stroke();
         }
+        else if (el.type === 'ellipse') {
+            this.ctx.ellipse(el.x + el.w / 2, el.y + el.h / 2,
+                Math.abs(el.w / 2), Math.abs(el.h / 2), 0, 0, Math.PI * 2);
+            this.ctx.stroke();
+            if (!el.isHollow) this.ctx.fill();
+        } else if (el.type === 'arrow') {
+            const x2 = el.x + el.w;
+            const y2 = el.y + el.h;
+            const angle = Math.atan2(y2 - el.y, x2 - el.x);
+            this.ctx.moveTo(el.x, el.y);
+            this.ctx.lineTo(x2, y2);
+            this.ctx.lineTo(x2 - 15 * Math.cos(angle - Math.PI / 6),
+                y2 - 15 * Math.sin(angle - Math.PI / 6));
+            this.ctx.moveTo(x2, y2);
+            this.ctx.lineTo(x2 - 15 * Math.cos(angle + Math.PI / 6),
+                y2 - 15 * Math.sin(angle + Math.PI / 6));
+            this.ctx.stroke();
+        }
         this.ctx.globalAlpha = 1;
     }
     createElement(pos) {
