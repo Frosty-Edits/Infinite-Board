@@ -48,6 +48,10 @@ class InfiniteBoard {
         this.ctx.strokeStyle = el.stroke || '#1e1e1e';
         this.ctx.fillStyle = el.fill || 'transparent';
         this.ctx.lineWidth = el.width || 2;
+        this.ctx.globalAlpha = el.opacity || 1;
+        if (el.style === 'dashed') this.ctx.setLineDash([10, 5]);
+        else if (el.style === 'dotted') this.ctx.setLineDash([2, 4]);
+        else this.ctx.setLineDash([]);
         if (el.type === 'rectangle') {
             this.ctx.strokeRect(el.x, el.y, el.w, el.h);
             if (!el.isHollow) this.ctx.fillRect(el.x, el.y, el.w, el.h);
@@ -76,6 +80,12 @@ class InfiniteBoard {
             this.ctx.lineTo(x2 - 15 * Math.cos(angle + Math.PI / 6),
                 y2 - 15 * Math.sin(angle + Math.PI / 6));
             this.ctx.stroke();
+        }
+        else if (el.type === 'text') {
+            this.ctx.font = `${el.width * 5}px sans-serif`;
+            this.ctx.textBaseline = 'top';
+            this.ctx.fillStyle = el.stroke;
+            this.ctx.fillText(el.text, el.x, el.y);
         }
         this.ctx.globalAlpha = 1;
     }
@@ -166,7 +176,11 @@ class InfiniteBoard {
         };
 
         
-        
+        document.getElementById('toggleFill').onclick = (e) => {
+            const hollow = e.target.dataset.hollow !== 'false';
+            e.target.dataset.hollow = hollow ? 'false' : 'true';
+            e.target.innerText = hollow ? 'Solid' : 'Hollow';
+        };
         
         
         
