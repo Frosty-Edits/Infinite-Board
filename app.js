@@ -3,7 +3,7 @@ class InfiniteBoard {
         this.canvas = document.getElementById('drawingCanvas');
         this.ctx = this.canvas.getContext('2d');
         this.elements = [];
-        this.currentTool = 'rectangle';
+        this.currentTool = 'selection';
         this.isDrawing = false;
         this.currentElement = null;
         this.pan = { x: 0, y: 0 };
@@ -39,7 +39,12 @@ class InfiniteBoard {
         this.ctx.scale(this.scale, this.scale);
         this.elements.forEach(el => this.drawElement(el));
         if (this.currentElement) this.drawElement(this.currentElement);
-        
+        this.selectedElements.forEach(el => {
+            this.ctx.setLineDash([5, 5]);
+            this.ctx.strokeStyle = '#6965db';
+            this.ctx.lineWidth = 1 / this.scale;
+            this.ctx.strokeRect(el.x - 5, el.y - 5, (el.w || 0) + 10, (el.h || 0) + 10);
+        });
         this.ctx.restore();
     }
 
@@ -120,7 +125,19 @@ class InfiniteBoard {
         this.canvas.onmousedown = (e) => {
             const pos = this.getMouse(e);
             this.startPos = pos;
-            
+            if (e.button === 1) {
+                this.isPanning = true;
+                return;
+            }
+            if (this.currentTool === 'selection') {
+                const hit = this.elements.slice().reverse().find(el =>
+                    pos.x > el.x - 5 && pos.x < el.x + (el.w || 0) + 5 &&
+                    pos.y > el.y - 5 && pos.y < el.y + (el.h || 0) + 5);
+                this.selectedElements = hit ? [hit] : [];
+                this.isDragging = !!hit;
+                this.render();
+                return;
+            }
             if (this.currentTool === 'text') {
                 const text = prompt('Text:');
                 if (text) {
