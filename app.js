@@ -155,7 +155,12 @@ class InfiniteBoard {
 
         window.onmousemove = (e) => {
             const pos = this.getMouse(e);
-            
+            if (this.isPanning) {
+                this.pan.x += e.movementX;
+                this.pan.y += e.movementY;
+                this.render();
+                return;
+            }
             if (this.isDragging) {
                 const dx = pos.x - this.startPos.x;
                 const dy = pos.y - this.startPos.y;
@@ -192,7 +197,15 @@ class InfiniteBoard {
             this.render();
         };
 
-        
+        this.canvas.onwheel = (e) => {
+            e.preventDefault();
+            const oldScale = this.scale;
+            this.scale = Math.min(Math.max(0.1, this.scale + (e.deltaY > 0 ? -0.1 : 0.1)), 5);
+            const ratio = this.scale / oldScale;
+            this.pan.x = e.clientX - (e.clientX - this.pan.x) * ratio;
+            this.pan.y = e.clientY - (e.clientY - this.pan.y) * ratio;
+            this.render();
+        };
         document.getElementById('toggleFill').onclick = (e) => {
             const hollow = e.target.dataset.hollow !== 'false';
             e.target.dataset.hollow = hollow ? 'false' : 'true';
