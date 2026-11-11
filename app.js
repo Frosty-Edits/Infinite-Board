@@ -219,7 +219,31 @@ class InfiniteBoard {
                 this.render();
             }
         };
-        
+        document.getElementById('exportJSON').onclick = () => {
+            const data = JSON.stringify({ elements: this.elements, pan: this.pan, scale: this.scale });
+            const blob = new Blob([data], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = 'board.json';
+            link.click();
+            URL.revokeObjectURL(url);
+        };
+        document.getElementById('importBtn').onclick = () => document.getElementById('fileInput').click();
+        document.getElementById('fileInput').onchange = (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                const data = JSON.parse(event.target.result);
+                this.elements = data.elements || [];
+                this.pan = data.pan || { x: 0, y: 0 };
+                this.scale = data.scale || 1;
+                this.save();
+                this.render();
+            };
+            reader.readAsText(file);
+        };
         
     }
 
