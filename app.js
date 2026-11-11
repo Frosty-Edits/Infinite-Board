@@ -15,7 +15,7 @@ class InfiniteBoard {
 
         this.resize();
         this.setupListeners();
-        
+        this.loadFromLocal();
         this.render();
     }
 
@@ -144,7 +144,7 @@ class InfiniteBoard {
                     const el = this.createElement(pos);
                     el.text = text;
                     this.elements.push(el);
-                    
+                    this.save();
                     this.render();
                 }
                 return;
@@ -187,9 +187,9 @@ class InfiniteBoard {
         window.onmouseup = () => {
             if (this.isDrawing && this.currentElement) {
                 this.elements.push(this.currentElement);
-                
+                this.save();
             }
-            if (this.isDragging) 
+            if (this.isDragging) this.save();
             this.isDrawing = false;
             this.isDragging = false;
             this.isPanning = false;
@@ -212,11 +212,33 @@ class InfiniteBoard {
             e.target.innerText = hollow ? 'Solid' : 'Hollow';
         };
         
-        
+        document.getElementById('undoBtn').onclick = () => {
+            if (this.elements.length) {
+                this.elements.pop();
+                this.save();
+                this.render();
+            }
+        };
         
         
     }
 
+    save() {
+        localStorage.setItem('ib_pro_data', JSON.stringify({
+            elements: this.elements,
+            pan: this.pan,
+            scale: this.scale
+        }));
+    }
+
+    loadFromLocal() {
+        const saved = localStorage.getItem('ib_pro_data');
+        if (!saved) return;
+        const data = JSON.parse(saved);
+        this.elements = data.elements || [];
+        this.pan = data.pan || { x: 0, y: 0 };
+        this.scale = data.scale || 1;
+    }
 
 
 }
