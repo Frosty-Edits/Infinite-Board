@@ -35,6 +35,13 @@ html {
     font-size: 12px;
 }
 
+.divider {
+    width: 1px;
+    height: 24px;
+    background: #ddd;
+    margin: 0 8px;
+}
+
 #logo {
     margin: 0 10px;
     font-size: 14px;
@@ -59,30 +66,18 @@ button.active {
     color: white;
 }
 
-#canvas-container {
-    width: 100vw;
-    height: 100vh;
-}
-
-canvas {
-    display: block;
-    cursor: crosshair;
-}
-
-.divider {
-    width: 1px;
-    height: 24px;
-    background: #ddd;
-    margin: 0 8px;
-}
-
 button.success {
     background: #28a745;
     color: white;
 }
 
-input[type="range"] {
-    width: 60px;
+button.danger {
+    color: red;
+}
+
+#canvas-container {
+    width: 100vw;
+    height: 100vh;
 }
 
 #canvas-container.light-grid {
@@ -99,4 +94,13 @@ input[type="range"] {
 
 #canvas-container.plain {
     background: white;
+}
+
+canvas {
+    display: block;
+    cursor: crosshair;
+}
+
+input[type="range"] {
+    width: 60px;
 }
