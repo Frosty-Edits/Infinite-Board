@@ -84,3 +84,19 @@ button.success {
 input[type="range"] {
     width: 60px;
 }
+
+#canvas-container.light-grid {
+    background-color: #f8f9fa;
+    background-image: radial-gradient(#ccc 1px, transparent 1px);
+    background-size: 30px 30px;
+}
+
+#canvas-container.dark-grid {
+    background-color: #1a1a1a;
+    background-image: radial-gradient(#444 1px, transparent 1px);
+    background-size: 30px 30px;
+}
+
+#canvas-container.plain {
+    background: white;
+}

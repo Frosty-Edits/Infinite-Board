@@ -211,7 +211,9 @@ class InfiniteBoard {
             e.target.dataset.hollow = hollow ? 'false' : 'true';
             e.target.innerText = hollow ? 'Solid' : 'Hollow';
         };
-        
+        document.getElementById('bgPreset').onchange = (e) => {
+            document.getElementById('canvas-container').className = e.target.value;
+        };
         document.getElementById('undoBtn').onclick = () => {
             if (this.elements.length) {
                 this.elements.pop();
@@ -244,7 +246,7 @@ class InfiniteBoard {
             };
             reader.readAsText(file);
         };
-        
+        document.getElementById('exportSVG').onclick = () => this.exportSVG();
     }
 
     save() {
@@ -264,7 +266,22 @@ class InfiniteBoard {
         this.scale = data.scale || 1;
     }
 
-
+    exportSVG() {
+        let svg = `<?xml version="1.0" encoding="UTF-8"?>`;
+        svg += `<svg xmlns="http://www.w3.org/2000/svg" width="${this.canvas.width}" height="${this.canvas.height}">`;
+        svg += `<rect width="100%" height="100%" fill="white" />`;
+        this.elements.forEach(el => {
+            if (el.type === 'rectangle') {
+                svg += `<rect x="${el.x}" y="${el.y}" width="${el.w}" height="${el.h}" fill="${el.isHollow ? 'none' : el.fill}" stroke="${el.stroke}" stroke-width="${el.width}" />`;
+            }
+        });
+        svg += '</svg>';
+        const url = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = 'board.svg';
+        link.click();
+    }
 }
 
 new InfiniteBoard();
