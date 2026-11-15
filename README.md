@@ -1,6 +1,7 @@
 # InfiniteBoard Pro
 
 A simple online whiteboard where you can draw, make shapes, add text, and save your work.
+![Uploading e4f602efc628934d466f7a205e1f23e879553b6670102dfdcfaf8c79d78f5ace.png…]()
 
 ## Features
 
